@@ -1,10 +1,13 @@
-// File: src/components/ChatArea.js
 import React, { useState } from 'react';
 import { FaPlus, FaSearch, FaLightbulb } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
 
 const ChatArea = () => {
   const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState([
+    { sender: 'user', text: 'What is brain tumor segmentation?' },
+    { sender: 'bot', text: 'Brain tumor segmentation is the process of identifying and labeling tumor regions in brain MRI scans using AI.' }
+  ]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -13,7 +16,18 @@ const ChatArea = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
+      const newMessage = { sender: 'user', text: inputValue.trim() };
+      setMessages((prev) => [...prev, newMessage]);
       console.log('Message sent:', inputValue);
+
+      // Simulate bot reply (optional)
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          { sender: 'bot', text: `You said: "${inputValue.trim()}"` }
+        ]);
+      }, 800);
+
       setInputValue('');
     }
   };
@@ -28,30 +42,30 @@ const ChatArea = () => {
 
       {/* Middle content */}
       <div className="flex-1 overflow-y-auto flex flex-col items-center justify-start p-6">
-        <div className="text-center w-full max-w-3xl">
-          <h1 className="text-2xl md:text-3xl font-semibold mb-6">What can I help with?</h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg cursor-pointer transition">
-              <div className="flex items-center gap-3">
-                <FaSearch className="text-gray-300 text-xl" />
-                <div>
-                  <p className="font-semibold">Search</p>
-                  <p className="text-xs text-gray-400 mt-1">Reason</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg cursor-pointer transition">
-              <div className="flex items-center gap-3">
-                <FaLightbulb className="text-gray-300 text-xl" />
-                <div>
-                  <p className="font-semibold">Deep Research</p>
-                  <p className="text-xs text-gray-400 mt-1">Create image</p>
-                </div>
-              </div>
-            </div>
+        <div className="w-full max-w-3xl space-y-4">
+          <div className="text-center mt-2">
+            <h1 className="text-2xl md:text-3xl font-semibold mb-6">What can I help with?</h1>
           </div>
+
+          {/* Chat messages */}
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`p-3 rounded-lg max-w-[75%] text-sm ${
+                  msg.sender === 'user'
+                    ? 'bg-blue-600 text-white rounded-br-none'
+                    : 'bg-gray-700 text-gray-100 rounded-bl-none'
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+
+          {/* Prompt cards */}
 
         </div>
       </div>
@@ -64,7 +78,7 @@ const ChatArea = () => {
               type="button"
               className="flex items-center justify-center h-10 w-10 text-xl bg-gray-600 hover:bg-gray-500 rounded-lg text-gray-300"
             >
-              <FaPlus  size={15}/> 
+              <FaPlus size={15} />
             </button>
 
             <input
@@ -78,10 +92,11 @@ const ChatArea = () => {
             <button
               type="submit"
               disabled={!inputValue.trim()}
-              className={`flex items-center justify-center h-10 w-10 rounded-lg ${inputValue.trim()
+              className={`flex items-center justify-center h-10 w-10 rounded-lg ${
+                inputValue.trim()
                   ? 'bg-blue-600 hover:bg-blue-500 text-white'
                   : 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                }`}
+              }`}
             >
               <FiSend />
             </button>
