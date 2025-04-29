@@ -29,7 +29,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className={`${isCollapsed ? '-translate-x-[20] ' : 'translate-x-0'} fixed relative z-40 top-0 left-0 h-full bg-gray-900 text-white flex flex-col transition-transform duration-300 ${isCollapsed ? 'w-16' : 'w-64'} border-r border-gray-700 overflow-y-auto`}>
+    <div className={`${isCollapsed ? '-translate-x-[20] ' : 'translate-x-0'}  relative z-40 top-0 left-0 h-full bg-gray-900 text-white flex flex-col transition-transform duration-300 ${isCollapsed ? 'w-16' : 'w-64'} border-r border-gray-700 overflow-y-auto`}>
       <div className="flex flex-col flex-1 p-3">
         <div className="flex items-center py-4 px-2  relative">
           {!isCollapsed && (
