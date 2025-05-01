@@ -1,35 +1,49 @@
 // File: src/components/Sidebar.js
-import React, { useState } from 'react';
-import { FaRegFileAlt, FaRegBookmark } from 'react-icons/fa';
-import { IoApps } from 'react-icons/io5';
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';  // Import these icons
-
+import React, { useState } from "react";
+import { FaRegFileAlt, FaRegBookmark } from "react-icons/fa";
+import { IoApps } from "react-icons/io5";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5"; // Import these icons
 
 const Sidebar = () => {
-  const [selectedModel, setSelectedModel] = useState('ChatGPT');
+  const [selectedModel, setSelectedModel] = useState("TrueYou");
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const models = [
-    { name: 'ChatGPT', icon: <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white font-bold">C</div> },
-    { name: 'Library', icon: <FaRegBookmark className="w-6 h-6 text-gray-400" />, count: 20 },
+    {
+      name: "TrueYou",
+      icon: (
+        <img
+          className="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white font-bold"
+          src="/public/logo.jpg"
+        ></img>
+      ),
+    },
+    {
+      name: "Library",
+      icon: <FaRegBookmark className="w-6 h-6 text-gray-400" />,
+      count: 20,
+    },
   ];
 
   const today = [
-    'React frontend setup guide',
-    'Remove back pocket',
-    'Digital Signatures and Integrit',
-    'Brain Tumor Segmentation Re',
-    'Interesting Thank You Ideas',
-    'Rephrasing Model Names',
+    "React frontend setup guide",
+    "Remove back pocket",
+    "Digital Signatures and Integrit",
+    "Brain Tumor Segmentation Re",
+    "Interesting Thank You Ideas",
+    "Rephrasing Model Names",
   ];
 
-  const yesterday = [
-    'Image creation request',
-    'Transfer Functions in DFA',
-  ];
+  const yesterday = ["Image creation request", "Transfer Functions in DFA"];
 
   return (
-    <div className={`${isCollapsed ? '-translate-x-[20] ' : 'translate-x-0'}  relative z-40 top-0 left-0 h-full bg-gray-900 text-white flex flex-col transition-transform duration-300 ${isCollapsed ? 'w-16' : 'w-64'} border-r border-gray-700 overflow-y-auto`}>
+    <div
+      className={`${
+        isCollapsed ? "-translate-x-[20] " : "translate-x-0"
+      }  relative z-40 top-0 left-0 h-full bg-gray-900 text-white flex flex-col transition-transform duration-300 ${
+        isCollapsed ? "w-16" : "w-64"
+      } border-r border-gray-700 overflow-y-auto`}
+    >
       <div className="flex flex-col flex-1 p-3">
         <div className="flex items-center py-4 px-2  relative">
           {!isCollapsed && (
@@ -41,7 +55,11 @@ const Sidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="absolute right-2 top-4 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 shadow-md"
           >
-            {isCollapsed ? <IoChevronForward className="text-white w-4 h-4" /> : <IoChevronBack className="text-white w-4 h-4" />}
+            {isCollapsed ? (
+              <IoChevronForward className="text-white w-4 h-4" />
+            ) : (
+              <IoChevronBack className="text-white w-4 h-4" />
+            )}
           </button>
         </div>
 
@@ -49,14 +67,22 @@ const Sidebar = () => {
           {models.map((model) => (
             <div
               key={model.name}
-              className={`flex items-center p-2 rounded cursor-pointer transition-colors ${selectedModel === model.name ? 'bg-gray-800' : 'hover:bg-gray-800'}`}
+              className={`flex items-center p-2 rounded cursor-pointer transition-colors ${
+                selectedModel === model.name
+                  ? "bg-gray-800"
+                  : "hover:bg-gray-800"
+              }`}
               onClick={() => setSelectedModel(model.name)}
             >
               {model.icon}
               {!isCollapsed && (
                 <div className="flex items-center justify-between flex-1 ml-2">
                   <span className="text-sm">{model.name}</span>
-                  {model.count && <span className="bg-gray-700 rounded-full px-2 py-0.5 text-xs">{model.count}</span>}
+                  {model.count && (
+                    <span className="bg-gray-700 rounded-full px-2 py-0.5 text-xs">
+                      {model.count}
+                    </span>
+                  )}
                 </div>
               )}
             </div>

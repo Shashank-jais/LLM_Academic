@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FaPlus, FaSearch, FaLightbulb } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { IoMdSettings } from "react-icons/io";
+import { CiLogout } from "react-icons/ci";
+import { CgProfile } from "react-icons/cg";
 
 const ChatArea = () => {
   const [inputValue, setInputValue] = useState("");
@@ -33,12 +37,54 @@ const ChatArea = () => {
       setInputValue("");
     }
   };
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col h-screen bg-gray-800 text-white">
       {/* Top bar */}
-      <div className="flex justify-between items-center p-4 border-b border-gray-700">
-        <span className="font-semibold text-lg">ChatGPT</span>
+      <div className="flex justify-between items-center p-4 border-b border-gray-700 relative">
+        <span className="font-semibold text-lg">TrueYou</span>
+
+        <div className="flex items-center gap-2 p-2">
+          <div
+            onClick={() => setOpen((prev) => !prev)}
+            className="flex justify-center items-center gap-1 hover:cursor-pointer hover:scale-105 transition"
+          >
+            <img
+              src="/public/image.png"
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          </div>
+
+          {open && (
+            <div className="absolute right-4 top-16 w-60 bg-gray-800 shadow-2xl rounded-xl z-50 border border-gray-600">
+              <ul className="flex flex-col">
+                <Link
+                  to="/profile"
+                  className="px-6 py-3 hover:bg-gray-700 text-white text-base rounded-t-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  <CgProfile />
+                  Profile
+                </Link>
+                <Link
+                  to="/settings"
+                  className="px-6 py-3 hover:bg-gray-700 text-white text-base transition-all duration-200 flex items-center gap-2"
+                >
+                  <IoMdSettings />
+                  Settings
+                </Link>
+                <Link
+                  to="/login"
+                  className="px-6 py-3 hover:bg-red-600 text-white text-base rounded-b-xl transition-all duration-200 flex items-center gap-2"
+                >
+                  <CiLogout />
+                  Logout
+                </Link>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Middle content */}
