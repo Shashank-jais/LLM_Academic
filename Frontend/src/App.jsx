@@ -4,6 +4,8 @@ import ChatArea from "./components/ChatArea";
 import SignUp from "./components/SignUp";
 import ConfirmSignUp from "./components/ConfirmSignup";
 import Login from "./components/Login";
+import Welcome from "./components/Welcome";
+import Result from "./components/Result";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/confirm" element={<ConfirmSignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </BrowserRouter>
   );
