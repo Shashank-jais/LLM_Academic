@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const [grade, setGrade] = useState("");
+
+  const options = ["9th or 10th", "11th or 12th", "Graduation"];
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     contact: "",
-
+    grade: grade,
     password: "",
-
     profileImage: null,
   });
 
@@ -53,131 +56,131 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-800 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-700 flex flex-col gap-10 p-[4rem] rounded-2xl w-full sm:w-[35rem] lg:w-[40rem] sm:my-[3rem]"
+        className="bg-white flex flex-col gap-8 rounded-2xl w-full max-w-3xl p-6 sm:p-10 shadow-xl"
       >
-        <div className="flex flex-col justify-center items-center border-b-2">
-          <h1 className="text-white text-[2rem] sm:text-[2.5rem] font-bold">
-            Create Your Account
+        <div className="flex flex-col items-center text-center">
+          <img
+            src="/public/logo.jpg"
+            alt="Logo"
+            className="w-24 h-24 object-contain mb-2"
+          />
+          <h1 className="text-blue-600 text-3xl sm:text-4xl font-bold mb-2">
+            Sign Up
           </h1>
-          <div className="mb-2">
-            <p>
-              Already have an account?{" "}
-              <Link to="/login" className="text-blue-600">
-                Log In
-              </Link>
-            </p>
+          <p className="text-sm sm:text-base">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-600 font-medium hover:underline"
+            >
+              Log In
+            </Link>
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          {[
+            { label: "First Name", name: "first_name", type: "text" },
+            { label: "Last Name", name: "last_name", type: "text" },
+            { label: "Email", name: "email", type: "email" },
+            { label: "Contact No.", name: "contact", type: "text" },
+          ].map(({ label, name, type }) => (
+            <label key={name} className="relative w-full">
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={(e) => handleChange(name, e.target.value)}
+                className="peer block w-full p-3 text-sm text-black bg-yellow-100 border border-white rounded-md focus:outline-none"
+                required
+              />
+              <span className="absolute left-3 top-3 bg-yellow-100 text-lg text-black transition-all duration-300 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1">
+                {label}
+              </span>
+            </label>
+          ))}
+        </div>
+
+        <label className="relative w-full">
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={(e) => handleChange("password", e.target.value)}
+            className="peer block w-full p-3 text-sm text-black bg-yellow-100 border border-white rounded-md focus:outline-none"
+            required
+          />
+          <span className="absolute left-3 top-3 bg-yellow-100 text-lg text-black transition-all duration-300 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1">
+            Create Password
+          </span>
+        </label>
+
+        <div className="w-full">
+          <p className="text-lg font-medium mb-2">What do you study?</p>
+          <div className="flex flex-wrap gap-3">
+            {options.map((option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() => {
+                  setGrade(option);
+                  setFormData((prevData) => ({ ...prevData, grade: option }));
+                }}
+                className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                  grade === option
+                    ? "bg-blue-600 text-white"
+                    : "border border-blue-500 text-blue-500 hover:scale-105 hover:border-blue-600 hover:text-blue-600"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-5">
-          <label className="relative w-full my-3">
-            <input
-              type="text"
-              name="first_name"
-              value={formData.first_name}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="block w-full p-3 text-sm text-white bg-gray-600 border border-white rounded-md appearance-none focus:outline-none peer"
-              required
-            />
-            <span className="absolute text-white text-lg duration-300 left-3 top-3 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1 bg-gray-600">
-              First Name
-            </span>
-          </label>
-          <label className="relative w-full my-3">
-            <input
-              type="text"
-              name="last_name"
-              value={formData.last_name}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="block w-full p-3 text-sm text-white bg-gray-600 border border-white rounded-md appearance-none focus:outline-none peer"
-              required
-            />
-            <span className="absolute text-white text-lg duration-300 left-3 top-3 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1 bg-gray-600">
-              Last Name
-            </span>
-          </label>
-          <label className="relative w-full my-3">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="block w-full p-3 text-sm text-white bg-gray-600 border border-white rounded-md appearance-none focus:outline-none peer"
-              required
-            />
-            <span className="absolute text-white text-lg duration-300 left-3 top-3 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1 bg-gray-600">
-              Email
-            </span>
-          </label>
-          <label className="relative w-full my-3">
-            <input
-              type="text"
-              name="contact"
-              value={formData.contact}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="block w-full p-3 text-sm text-white bg-gray-600 border border-white rounded-md appearance-none focus:outline-none peer"
-              required
-            />
-            <span className="absolute text-white text-lg duration-300 left-3 top-3 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1 bg-gray-600">
-              Contact No.
-            </span>
-          </label>
-        </div>
-        <div className="flex flex-col w-full gap-2">
-          <label className="relative w-full my-3">
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              className="block w-full p-3 text-sm text-white bg-gray-600 border border-white rounded-md focus:outline-none peer"
-              required
-            />
-            <span className="absolute text-white text-lg duration-300 left-3 top-3 peer-focus:text-sm peer-focus:-translate-y-5 peer-focus:px-1 peer-valid:text-sm peer-valid:-translate-y-5 peer-valid:px-1 bg-gray-600">
-              Create Password
-            </span>
-          </label>
-        </div>
-        <div className="flex flex-col w-full gap-2 rounded-lg shadow-sm hover:bg-gray-800 focus:border-2 duration-300 focus:outline-none">
-          <input
-            type="file"
-            id="file"
-            className="hidden"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+
+        <div className="bg-yellow-100 rounded-lg p-4 flex flex-col items-start gap-2">
           <label
             htmlFor="file"
-            className="text-white font-medium cursor-pointer inline-block px-10 py-4"
+            className="text-black font-medium cursor-pointer"
           >
             Choose a picture
           </label>
-        </div>
-        {formData.profileImage && (
-          <img
-            src={formData.profileImage}
-            alt="Profile Preview"
-            className="w-32 h-32 object-cover rounded-full mx-auto"
+          <input
+            type="file"
+            id="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
           />
-        )}
+          {formData.profileImage && (
+            <img
+              src={formData.profileImage}
+              alt="Profile Preview"
+              className="w-24 h-24 object-cover rounded-full mt-2"
+            />
+          )}
+        </div>
+
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 p-2 rounded-full text-white mx-auto transition-scale hover:scale-[1.1] hover:cursor-pointer duration-[300ms] font-bold text-[14px] w-full"
+          className="bg-yellow-500 hover:bg-yellow-600 p-3 rounded-full text-white font-bold text-base transition-transform hover:scale-105 w-full"
         >
-          CREATE ACCOUNT
+          SIGN UP
         </button>
 
-        <div className=" mb-2">
-          <p>
-            Make sure to{" "}
-            <Link to="/confirm" className="text-blue-600">
-              Confirm Sign Up
-            </Link>{" "}
-            before logging in.{" "}
-          </p>
-        </div>
+        <p className="text-center text-sm">
+          Make sure to{" "}
+          <Link
+            to="/confirm"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            Confirm Sign Up
+          </Link>{" "}
+          before logging in.
+        </p>
       </form>
     </div>
   );
