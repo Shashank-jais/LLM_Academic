@@ -6,6 +6,7 @@ import ConfirmSignUp from "./components/ConfirmSignup";
 import Login from "./components/Login";
 import Welcome from "./components/Welcome";
 import Result from "./components/Result";
+import Questionnaire from "./components/Questionnaire";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/result" element={<Result />} />
+        <Route path="/questionnaire" element={<Questionnaire />} />
       </Routes>
     </BrowserRouter>
   );
