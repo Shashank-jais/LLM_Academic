@@ -7,6 +7,8 @@ import Login from "./components/Login";
 import Welcome from "./components/Welcome";
 import Result from "./components/Result";
 import Questionnaire from "./components/Questionnaire";
+// import ProfileFrontend from "./components/ProfileFrontend";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/result" element={<Result />} />
         <Route path="/questionnaire" element={<Questionnaire />} />
+        <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/profileFrontend" element={<ProfileFrontend />} /> */}
       </Routes>
     </BrowserRouter>
   );
