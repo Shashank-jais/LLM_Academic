@@ -41,10 +41,22 @@ const SignUp = () => {
 
   const navigate = useNavigate();
   const handleSignUp = async (formData) => {
+    console.log("Signing up with data:", formData);
     try {
-      console.log("Signing up with data:", formData);
+      const res = await fetch("http://localhost:8000/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: formData.first_name + " " + formData.last_name,
+          email: formData.email,
+          password: formData.password,
+          education_level: formData.grade,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
 
-      navigate(`/confirm`);
+      navigate(`/auth/confirm`);
     } catch (error) {
       console.error("Signup error:", error);
     }

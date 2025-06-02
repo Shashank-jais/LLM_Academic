@@ -23,9 +23,9 @@ function App() {
             </div>
           }
         />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/confirm" element={<ConfirmSignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/auth/confirm" element={<ConfirmSignUp />} />
+        <Route path="/auth/login" element={<Login />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/result" element={<Result />} />
         <Route path="/questionnaire" element={<Questionnaire />} />

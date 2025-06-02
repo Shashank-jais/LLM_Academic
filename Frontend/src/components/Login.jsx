@@ -28,6 +28,16 @@ const Login = () => {
   const handleLogin = async (formData) => {
     try {
       console.log("Logging in data:", formData);
+      const res = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
       navigate("/welcome");
     } catch (error) {
       console.error("Login error:", error);
@@ -52,7 +62,7 @@ const Login = () => {
           <p className="text-sm sm:text-base mt-2">
             Don't have an account?{" "}
             <Link
-              to="/signup"
+              to="/auth/signup"
               className="text-blue-600 font-medium hover:underline"
             >
               Sign Up

@@ -40,10 +40,9 @@ const ChatArea = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-800 text-white">
-      {/* Top bar */}
+    <div className="flex flex-col h-screen bg-white text-gray-700">
       <div className="flex justify-between items-center p-4 border-b border-gray-700 relative">
-        <span className="font-semibold text-lg">TrueYou</span>
+        <span className="font-semibold text-lg text-blue-600">TrueYou</span>
 
         <div className="flex items-center gap-2 p-2">
           <div
@@ -75,7 +74,7 @@ const ChatArea = () => {
                   Settings
                 </Link>
                 <Link
-                  to="/login"
+                  to="/auth/login"
                   className="px-6 py-3 hover:bg-red-600 text-white text-base rounded-b-xl transition-all duration-200 flex items-center gap-2"
                 >
                   <CiLogout />
@@ -87,7 +86,6 @@ const ChatArea = () => {
         </div>
       </div>
 
-      {/* Middle content */}
       <div className="flex-1 overflow-y-auto flex flex-col items-center justify-start p-6">
         <div className="w-full max-w-3xl space-y-4">
           <div className="text-center mt-2">
@@ -96,7 +94,6 @@ const ChatArea = () => {
             </h1>
           </div>
 
-          {/* Chat messages */}
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -107,7 +104,7 @@ const ChatArea = () => {
               <div
                 className={`p-3 rounded-lg max-w-[75%] text-sm ${
                   msg.sender === "user"
-                    ? "bg-blue-600 text-white rounded-br-none"
+                    ? "bg-yellow-200 text-gray-700 rounded-br-none"
                     : "bg-gray-700 text-gray-100 rounded-bl-none"
                 }`}
               >
@@ -115,18 +112,15 @@ const ChatArea = () => {
               </div>
             </div>
           ))}
-
-          {/* Prompt cards */}
         </div>
       </div>
 
-      {/* Chat input */}
       <div className="p-4 border-t border-gray-700">
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-          <div className="flex items-center bg-gray-700 rounded-lg p-2">
+          <div className="flex items-center bg-yellow-100 rounded-lg p-2">
             <button
               type="button"
-              className="flex items-center justify-center h-10 w-10 text-xl bg-gray-600 hover:bg-gray-500 rounded-lg text-gray-300"
+              className="flex items-center justify-center h-10 w-10 text-xl bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white"
             >
               <FaPlus size={15} />
             </button>
@@ -136,7 +130,7 @@ const ChatArea = () => {
               value={inputValue}
               onChange={handleInputChange}
               placeholder="Ask anything..."
-              className="flex-1 mx-2 bg-transparent text-white outline-none text-sm placeholder-gray-400"
+              className="flex-1 mx-2 bg-transparent text-gray-700 outline-none text-sm placeholder-gray-400"
             />
 
             <button
@@ -144,8 +138,8 @@ const ChatArea = () => {
               disabled={!inputValue.trim()}
               className={`flex items-center justify-center h-10 w-10 rounded-lg ${
                 inputValue.trim()
-                  ? "bg-blue-600 hover:bg-blue-500 text-white"
-                  : "bg-gray-600 text-gray-400 cursor-not-allowed"
+                  ? "bg-green-600 hover:bg-green-500 text-white"
+                  : "bg-yellow-600 text-white cursor-not-allowed"
               }`}
             >
               <FiSend />
