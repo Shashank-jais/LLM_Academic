@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaPlus, FaSearch, FaLightbulb } from "react-icons/fa";
+import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
@@ -77,9 +77,10 @@ const ChatArea = () => {
                 </Link>
                 <button
                   onClick={() => {
-                    sessionStorage.removeItem("token");
-                    sessionStorage.removeItem("user");
-                    navigate("/auth/login"); // redirect after logout
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("loginTime");
+                    navigate("/auth/login");
                   }}
                   className="px-6 py-3 hover:bg-red-600 text-white text-base rounded-b-xl transition-all duration-200 flex items-center gap-2"
                 >

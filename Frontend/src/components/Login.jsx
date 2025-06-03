@@ -47,8 +47,9 @@ const Login = () => {
       if (!res.ok) {
         throw new Error(data.detail || "Login failed");
       }
-      sessionStorage.setItem("token", data.access_token);
-      sessionStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("loginTime", Date.now().toString());
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);

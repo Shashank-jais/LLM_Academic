@@ -17,11 +17,11 @@ const Profile = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     }
-    const storedUser = sessionStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
