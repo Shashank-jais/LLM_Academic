@@ -51,6 +51,7 @@ const SignUp = () => {
           email: formData.email,
           password: formData.password,
           education_level: formData.grade,
+          contact: formData.contact,
         }),
       });
       const data = await res.json();
