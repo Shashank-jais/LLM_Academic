@@ -54,9 +54,17 @@ const SignUp = () => {
         }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || "Login failed");
+      }
       console.log(data);
-
-      navigate(`/auth/confirm`);
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+      sessionStorage.setItem(
+        "education_level",
+        JSON.stringify(data.education_level)
+      );
+      console.log(data);
+      navigate("/welcome");
     } catch (error) {
       console.error("Signup error:", error);
     }
@@ -85,7 +93,7 @@ const SignUp = () => {
           <p className="text-sm sm:text-base">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to="/auth/login"
               className="text-blue-600 font-medium hover:underline"
             >
               Log In

@@ -10,6 +10,13 @@ const Login = () => {
     passwordRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    const educatioan_level = sessionStorage.getItem("educatioan_level");
+    if (educatioan_level) {
+      navigate("/welcome");
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,8 +44,12 @@ const Login = () => {
         }),
       });
       const data = await res.json();
-      console.log(data);
-      navigate("/welcome");
+      if (!res.ok) {
+        throw new Error(data.detail || "Login failed");
+      }
+      sessionStorage.setItem("token", data.access_token);
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/");
     } catch (error) {
       console.error("Login error:", error);
     }

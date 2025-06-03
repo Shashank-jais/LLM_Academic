@@ -31,7 +31,7 @@ const Welcome = () => {
           className="bg-yellow-500 text-white rounded-xl px-8 py-3 text-lg font-semibold cursor-pointer transition-all duration-300 ease-in-out hover:bg-yellow-600 shadow-button-glow hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-400"
           aria-label="Start Questionnaire"
           onClick={() => {
-            navigate("/questionnaire");
+            navigate("/profile/questionnaire");
           }}
         >
           Start Questionnaire

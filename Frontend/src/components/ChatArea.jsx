@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
+import { useNavigate } from "react-router-dom";
 
 const ChatArea = () => {
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     { sender: "user", text: "What is brain tumor segmentation?" },
     {
@@ -73,13 +75,17 @@ const ChatArea = () => {
                   <IoMdSettings />
                   Settings
                 </Link>
-                <Link
-                  to="/auth/login"
+                <button
+                  onClick={() => {
+                    sessionStorage.removeItem("token");
+                    sessionStorage.removeItem("user");
+                    navigate("/auth/login"); // redirect after logout
+                  }}
                   className="px-6 py-3 hover:bg-red-600 text-white text-base rounded-b-xl transition-all duration-200 flex items-center gap-2"
                 >
                   <CiLogout />
                   Logout
-                </Link>
+                </button>
               </ul>
             </div>
           )}
