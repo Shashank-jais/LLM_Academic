@@ -4,9 +4,7 @@ import axios from "axios";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  // After you complete Backend integration, fetch this data from an API from your auth/state
-  // Define dummy API endpoints
-  // change name and connect to backend API
+
   const DUMMY_API = {
     profile: "https://dummyjson.com/c/24af-a3a4-4809-9dcb", // get request dummy api
     academicProgress: "https://dummyjson.com/c/ded0-30c0-40ac-866c",
@@ -41,7 +39,7 @@ const Profile = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login");
+      navigate("/auth/login");
     }
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -49,7 +47,6 @@ const Profile = () => {
     }
   }, [navigate]);
 
-  // If user is not authenticated, show loading
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { FiSend } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
@@ -40,6 +39,18 @@ const ChatArea = () => {
     }
   };
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/auth/login");
+    }
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [navigate]);
 
   return (
     <div className="flex flex-col h-screen bg-white text-gray-700">
