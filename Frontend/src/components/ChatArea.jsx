@@ -129,8 +129,8 @@ const ChatArea = () => {
               type="button"
               className="flex items-center justify-center h-10 w-10 text-xl bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white"
             >
-              <FaPlus size={15} /> */}
-            </button>
+              <FaPlus size={15} />
+            </button> */}
 
             <input
               type="text"
