@@ -125,12 +125,12 @@ const ChatArea = () => {
       <div className="p-4 border-t border-gray-700">
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
           <div className="flex items-center bg-yellow-100 rounded-lg p-2">
-            <button
+            {/* <button
               type="button"
               className="flex items-center justify-center h-10 w-10 text-xl bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white"
             >
               <FaPlus size={15} />
-            </button>
+            </button> */}
 
             <input
               type="text"

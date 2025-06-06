@@ -1,6 +1,7 @@
 // File: src/components/Sidebar.js
 import React, { useState } from "react";
 import { FaRegFileAlt, FaRegBookmark } from "react-icons/fa";
+import { RiAiGenerate2 } from "react-icons/ri";
 import { IoApps } from "react-icons/io5";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5"; // Import these icons
 
@@ -22,6 +23,10 @@ const Sidebar = () => {
       name: "Library",
       icon: <FaRegBookmark className="w-6 h-6 text-gray-400" />,
       count: 20,
+    },
+    {
+      name: "Generate Report",
+      icon: <RiAiGenerate2  className="w-6 h-6 text-gray-400" />,
     },
   ];
 
