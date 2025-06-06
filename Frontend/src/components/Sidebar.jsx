@@ -1,16 +1,15 @@
-// File: src/components/Sidebar.js
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaRegFileAlt, FaRegBookmark } from "react-icons/fa";
-import { IoApps } from "react-icons/io5";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5"; // Import these icons
+import { RiAiGenerate2 } from "react-icons/ri";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 const Sidebar = () => {
-  const [selectedModel, setSelectedModel] = useState("TrueYou");
+  const [selectedModel, setSelectedModel] = useState("TrueYou Careers");
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const models = [
     {
-      name: "TrueYou",
+      name: "TrueYou Careers",
       icon: (
         <img
           className="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white font-bold"
@@ -22,6 +21,10 @@ const Sidebar = () => {
       name: "Library",
       icon: <FaRegBookmark className="w-6 h-6 text-gray-400" />,
       count: 20,
+    },
+    {
+      name: "Generate Report",
+      icon: <RiAiGenerate2 className="w-6 h-6 text-gray-400" />,
     },
   ];
 
