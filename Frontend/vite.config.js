@@ -1,25 +1,42 @@
+/* eslint-disable no-unused-vars */
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-// import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react"; // or your framework plugin
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: "0.0.0.0", // Allow external connections
+    port: 5173, // or your preferred port
+    strictPort: true,
+    cors: true,
     proxy: {
-      // Proxy /guidance requests to your backend server
-      "/guidance": {
-        target: "http://localhost:8000", // Your backend server address
-        changeOrigin: true, // Needed for virtual hosted sites
-        // secure: false, // Uncomment if your backend is not using HTTPS
-        // rewrite: (path) => path.replace(/^\/api/, ''), // Optional: if you want to remove /api prefix
-      },
-      // Proxy /report requests to your backend server
-      "/report": {
-        target: "http://localhost:8000", // Your backend server address
+      "/api": {
+        target: "http://localhost:8000", // Your backend URL
         changeOrigin: true,
-        // secure: false,
+        secure: false,
+        ws: true, // Enable WebSocket proxying if needed
+        configure: (proxy, _options) => {
+          proxy.on("error", (err, _req, _res) => {
+            console.log("proxy error", err);
+          });
+          proxy.on("proxyReq", (proxyReq, req, _res) => {
+            console.log("Sending Request to the Target:", req.method, req.url);
+          });
+          proxy.on("proxyRes", (proxyRes, req, _res) => {
+            console.log(
+              "Received Response from the Target:",
+              proxyRes.statusCode,
+              req.url
+            );
+          });
+        },
       },
     },
+  },
+  preview: {
+    host: "0.0.0.0",
+    port: 5173,
+    strictPort: true,
+    cors: true,
   },
 });
