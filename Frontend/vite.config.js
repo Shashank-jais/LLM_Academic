@@ -13,12 +13,14 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       strictPort: true,
       cors: true,
+      allowedHosts: ["trueyoucareers.com", "localhost", "127.0.0.1", "0.0.0.0"],
     },
     preview: {
       host: "0.0.0.0",
       port: 5173,
       strictPort: true,
       cors: true,
+      allowedHosts: ["trueyoucareers.com", "localhost", "127.0.0.1", "0.0.0.0"],
     },
     define: {
       __API_URL__: JSON.stringify(env.VITE_API_URL),
