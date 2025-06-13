@@ -15,10 +15,11 @@ export default defineConfig(({ mode }) => {
       cors: true,
       proxy: {
         "/api": {
-          target: env.VITE_API_URL || "http://localhost:8000", // Use env variable with fallback
+          target: "http://localhost:8000", // Direct backend URL
           changeOrigin: true,
           secure: false,
           ws: true, // Enable WebSocket proxying if needed
+          rewrite: (path) => path.replace(/^\/api/, ""), // Remove /api prefix when forwarding
           configure: (proxy, _options) => {
             proxy.on("error", (err, _req, _res) => {
               console.log("proxy error", err);

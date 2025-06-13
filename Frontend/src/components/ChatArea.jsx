@@ -46,8 +46,8 @@ const ChatArea = () => {
       setLoading(true);
 
       try {
-        // Use relative path for proxy
-        const response = await fetch("/guidance/chat", {
+        // Use /api prefix for Caddy proxy
+        const response = await fetch("/api/guidance/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

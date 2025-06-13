@@ -17,8 +17,8 @@ const Sidebar = () => {
 
     setIsGeneratingReport(true);
     try {
-      // Use relative path for proxy
-      const response = await fetch(`/report/generate/${userId}`, {
+      // Use /api prefix for Caddy proxy
+      const response = await fetch(`/api/report/generate/${userId}`, {
         method: "GET",
         // Add authorization headers if your endpoint is protected
         // headers: {
