@@ -1,6 +1,6 @@
 // only forntend have to update according to the backend
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProfileFrontend = () => {
   // After you complete Backend integration, fetch this data from an API from your auth/state
@@ -10,7 +10,7 @@ const ProfileFrontend = () => {
     email: "name@gmail.com",
     contact: "+91 9419xxxx20",
     grade: "11th or 12th",
-    profileImage: "/public/image.png"
+    profileImage: "/public/image.png",
   };
 
   const navigate = useNavigate();
@@ -31,13 +31,16 @@ const ProfileFrontend = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">Personal Information</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              Personal Information
+            </h2>
             <div className="space-y-3">
               <p className="text-gray-700">
                 <span className="font-medium">Email:</span> {userProfile.email}
               </p>
               <p className="text-gray-700">
-                <span className="font-medium">Contact:</span> {userProfile.contact}
+                <span className="font-medium">Contact:</span>{" "}
+                {userProfile.contact}
               </p>
               <p className="text-gray-700">
                 <span className="font-medium">Grade:</span> {userProfile.grade}
@@ -46,7 +49,9 @@ const ProfileFrontend = () => {
           </div>
 
           <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">Academic Progress</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              Academic Progress
+            </h2>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-700">Questionnaires Completed</span>
@@ -62,14 +67,14 @@ const ProfileFrontend = () => {
 
         <div className="mt-8 space-y-4">
           <button
-            onClick={() => navigate('/questionnaire')}
+            onClick={() => navigate("/questionnaire")}
             className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-full transition-all duration-300"
           >
             Continue Assessment
           </button>
-          
+
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/chat")}
             className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-full transition-all duration-300"
           >
             Back to Chat
