@@ -180,7 +180,7 @@ const Questionnaire = () => {
 
                   navigate(`/result`); // Navigate to results page
                 } else {
-                  const errorData = await response.json();
+                  const errorData = await response.json().catch(() => ({}));
                   console.error("Server error:", errorData);
                   alert(
                     "Something went wrong submitting your answers: " +
@@ -189,7 +189,18 @@ const Questionnaire = () => {
                 }
               } catch (error) {
                 console.error("Submission failed", error);
-                alert("An error occurred during submission.");
+                if (
+                  error.message.includes("CORS") ||
+                  error.name === "TypeError"
+                ) {
+                  alert(
+                    "Network error: Please check your internet connection and try again. If the problem persists, contact support."
+                  );
+                } else {
+                  alert(
+                    "An error occurred during submission: " + error.message
+                  );
+                }
               }
             } else {
               alert("Please answer all questions before proceeding.");

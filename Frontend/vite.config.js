@@ -14,6 +14,14 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       cors: true,
       allowedHosts: ["trueyoucareers.com", "localhost", "127.0.0.1", "0.0.0.0"],
+      proxy: {
+        "/api": {
+          target: "https://api.trueyoucareers.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""),
+          secure: true,
+        },
+      },
     },
     preview: {
       host: "0.0.0.0",

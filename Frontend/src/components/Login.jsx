@@ -80,7 +80,7 @@ const Login = () => {
 
           if (questionnaireRes.ok) {
             // Questionnaire data exists
-            navigate("/"); // Navigate to chat area
+            navigate("/chat"); // Navigate to chat area
           } else if (questionnaireRes.status === 404) {
             // Questionnaire data does not exist
             if (data.education_level) {
@@ -90,8 +90,6 @@ const Login = () => {
               );
               navigate("/profile/questionnaire");
             } else {
-              // If education_level is not in user profile, redirect to Welcome page to set it.
-              // This assumes Welcome.jsx sets education_level in sessionStorage and then navigates to questionnaire.
               navigate("/welcome");
             }
           } else {
@@ -100,15 +98,23 @@ const Login = () => {
               "Error checking questionnaire status:",
               await questionnaireRes.text()
             );
-            alert("Could not verify questionnaire status. Proceeding to chat.");
-            navigate("/"); // Fallback to chat area
+            // CORS or other network errors - fallback to welcome page
+            navigate("/welcome");
           }
         } catch (qError) {
           console.error("Failed to fetch questionnaire status:", qError);
-          alert(
-            "An error occurred while checking your profile status. Proceeding to chat."
-          );
-          navigate("/"); // Fallback to chat area
+          // Handle CORS errors or network issues
+          if (qError.message.includes("CORS") || qError.name === "TypeError") {
+            console.warn(
+              "CORS error detected. Redirecting to welcome page as fallback."
+            );
+            navigate("/welcome");
+          } else {
+            alert(
+              "An error occurred while checking your profile status. Proceeding to welcome page."
+            );
+            navigate("/welcome");
+          }
         }
       } else {
         // Fallback if user_id is not available from API response

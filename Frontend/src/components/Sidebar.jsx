@@ -64,7 +64,12 @@ const Sidebar = () => {
       alert("Report downloaded successfully."); // Or use a more subtle notification
     } catch (error) {
       console.error("Failed to download report:", error);
-      alert(`Error downloading report: ${error.message}`);
+      let errorMessage = `Error downloading report: ${error.message}`;
+      if (error.message.includes("CORS") || error.name === "TypeError") {
+        errorMessage =
+          "Network error: Unable to download report. Please check your internet connection and try again.";
+      }
+      alert(errorMessage);
     } finally {
       setIsGeneratingReport(false);
     }

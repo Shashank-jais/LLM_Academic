@@ -60,7 +60,7 @@ const ChatArea = () => {
         );
 
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData = await response.json().catch(() => ({}));
           console.error("Chat API error:", errorData);
           // Revert optimistic update or show error message
           setMessages((prev) => prev.slice(0, -1)); // Remove last user message
@@ -93,11 +93,16 @@ const ChatArea = () => {
         console.error("Failed to send message:", error);
         // Revert optimistic update or show error message
         setMessages((prev) => prev.slice(0, -1)); // Remove last user message
+        let errorMessage = "Error: Could not connect to the chat service.";
+        if (error.message.includes("CORS") || error.name === "TypeError") {
+          errorMessage =
+            "Error: Network connection issue. Please check your internet connection.";
+        }
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant", // Changed from "ai" to "assistant"
-            content: "Error: Could not connect to the chat service.",
+            content: errorMessage,
             timestamp: new Date().toISOString(),
           },
         ]);
