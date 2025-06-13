@@ -157,7 +157,7 @@ const Questionnaire = () => {
                 console.log("Sending payload:", payload); // Debug log
 
                 const response = await fetch(
-                  "http://localhost:8000/profile/questionnaire",
+                  `${import.meta.env.VITE_API_URL}profile/questionnaire`,
                   {
                     method: "POST",
                     headers: {

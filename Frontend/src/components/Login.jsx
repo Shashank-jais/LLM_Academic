@@ -37,7 +37,7 @@ const Login = () => {
   const handleLogin = async (formData) => {
     try {
       console.log("Logging in data:", formData);
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -66,7 +66,9 @@ const Login = () => {
       if (data.user_id) {
         try {
           const questionnaireRes = await fetch(
-            `http://localhost:8000/profile/questionnaire/${data.user_id}`,
+            `${import.meta.env.VITE_API_URL}profile/questionnaire/${
+              data.user_id
+            }`,
             {
               method: "GET",
               headers: {
