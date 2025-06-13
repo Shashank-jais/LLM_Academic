@@ -7,7 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf node_modules package-lock.json .next dist build .cache",
+    "clean:win": "rmdir /s /q node_modules && del package-lock.json && rmdir /s /q .next && rmdir /s /q dist && rmdir /s /q build && rmdir /s /q .cache",
+    "fresh-install": "npm run clean && npm install",
+    "fresh-install:win": "npm run clean:win && npm install",
+    "rebuild": "npm run fresh-install && npm run build",
+    "rebuild:win": "npm run fresh-install:win && npm run build",
+    "dev:clean": "npm run clean && npm install && npm run dev",
+    "dev:clean:win": "npm run clean:win && npm install && npm run dev",
+    "serve:fresh": "npm run rebuild && npm start",
+    "serve:fresh:win": "npm run rebuild:win && npm start"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
