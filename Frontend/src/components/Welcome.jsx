@@ -14,7 +14,7 @@ const Welcome = () => {
         </div>
 
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-          Hi Rahul!
+          Hi!
         </h1>
         <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-8">
           Welcome to TrueYouCareers
