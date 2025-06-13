@@ -17,14 +17,16 @@ const Sidebar = () => {
 
     setIsGeneratingReport(true);
     try {
-      // Use /api prefix for Caddy proxy
-      const response = await fetch(`/api/report/generate/${userId}`, {
-        method: "GET",
-        // Add authorization headers if your endpoint is protected
-        // headers: {
-        //   'Authorization': `Bearer ${localStorage.getItem("token")}`, // Example if token is needed
-        // },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}report/generate/${userId}`,
+        {
+          method: "GET",
+          // Add authorization headers if your endpoint is protected
+          // headers: {
+          //   'Authorization': `Bearer ${localStorage.getItem("token")}`, // Example if token is needed
+          // },
+        }
+      );
 
       if (!response.ok) {
         let errorDetail = `HTTP error! status: ${response.status}`;

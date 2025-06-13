@@ -46,16 +46,18 @@ const ChatArea = () => {
       setLoading(true);
 
       try {
-        // Use /api prefix for Caddy proxy
-        const response = await fetch("/api/guidance/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_id: userId,
-            session_id: currentSessionId,
-            question: userMessage.content, // Changed 'message' to 'question'
-          }),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}guidance/chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_id: userId,
+              session_id: currentSessionId,
+              question: userMessage.content, // Changed 'message' to 'question'
+            }),
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
