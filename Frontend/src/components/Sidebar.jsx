@@ -6,6 +6,74 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 const Sidebar = () => {
   const [selectedModel, setSelectedModel] = useState("TrueYou Careers");
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+
+  const downloadReport = async () => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
+
+    setIsGeneratingReport(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}report/generate/${userId}`,
+        {
+          method: "GET",
+          // Add authorization headers if your endpoint is protected
+          // headers: {
+          //   'Authorization': `Bearer ${localStorage.getItem("token")}`, // Example if token is needed
+          // },
+        }
+      );
+
+      if (!response.ok) {
+        let errorDetail = `HTTP error! status: ${response.status}`;
+        try {
+          const errorJson = await response.json();
+          errorDetail = errorJson.detail || errorDetail;
+        } catch (e) {
+          // Not a JSON error response, or failed to parse
+          console.log("Failed to parse error response:", e);
+        }
+        throw new Error(errorDetail);
+      }
+
+      const blob = await response.blob();
+      const filenameHeader = response.headers.get("Content-Disposition");
+      let filename = `career_report_${userId}.pdf`; // Default filename
+
+      if (filenameHeader) {
+        const parts = filenameHeader.split("filename=");
+        if (parts.length > 1) {
+          filename = parts[1].replace(/"/g, ""); // Remove quotes if present
+        }
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      alert("Report downloaded successfully."); // Or use a more subtle notification
+    } catch (error) {
+      console.error("Failed to download report:", error);
+      let errorMessage = `Error downloading report: ${error.message}`;
+      if (error.message.includes("CORS") || error.name === "TypeError") {
+        errorMessage =
+          "Network error: Unable to download report. Please check your internet connection and try again.";
+      }
+      alert(errorMessage);
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
 
   const models = [
     {
@@ -70,17 +138,33 @@ const Sidebar = () => {
           {models.map((model) => (
             <div
               key={model.name}
-              className={`flex items-center p-2 rounded cursor-pointer transition-colors ${
-                selectedModel === model.name
+              className={`flex items-center p-2 rounded transition-colors ${
+                selectedModel === model.name && model.name !== "Generate Report"
                   ? "bg-gray-800"
                   : "hover:bg-gray-800"
+              } ${
+                model.name === "Generate Report" && isGeneratingReport
+                  ? "cursor-not-allowed opacity-50"
+                  : "cursor-pointer"
               }`}
-              onClick={() => setSelectedModel(model.name)}
+              onClick={() => {
+                if (model.name === "Generate Report") {
+                  if (!isGeneratingReport) {
+                    downloadReport();
+                  }
+                } else {
+                  setSelectedModel(model.name);
+                }
+              }}
             >
               {model.icon}
               {!isCollapsed && (
                 <div className="flex items-center justify-between flex-1 ml-2">
-                  <span className="text-sm">{model.name}</span>
+                  <span className="text-sm">
+                    {model.name === "Generate Report" && isGeneratingReport
+                      ? "Generating Report..."
+                      : model.name}
+                  </span>
                   {model.count && (
                     <span className="bg-gray-700 rounded-full px-2 py-0.5 text-xs">
                       {model.count}

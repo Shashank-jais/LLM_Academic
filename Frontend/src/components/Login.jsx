@@ -4,18 +4,21 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const navigate = useNavigate(); // Moved navigate initialization here
 
   useEffect(() => {
     emailRef.current?.focus();
-    passwordRef.current?.focus();
+    // passwordRef.current?.focus(); // Focusing on one field is usually enough
   }, []);
 
   useEffect(() => {
-    const educatioan_level = sessionStorage.getItem("educatioan_level");
-    if (educatioan_level) {
-      navigate("/welcome");
+    const education_level = sessionStorage.getItem("education_level"); // Typo fixed: educatioan_level -> education_level
+    if (education_level) {
+      // This logic might need re-evaluation depending on desired flow.
+      // For now, keeping it but noting it might conflict if user explicitly navigates to login.
+      // navigate("/welcome");
     }
-  }, []);
+  }, [navigate]); // Added navigate to dependency array
 
   const [formData, setFormData] = useState({
     email: "",
@@ -31,11 +34,10 @@ const Login = () => {
     }));
   };
 
-  const navigate = useNavigate();
   const handleLogin = async (formData) => {
     try {
       console.log("Logging in data:", formData);
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -48,11 +50,82 @@ const Login = () => {
         throw new Error(data.detail || "Login failed");
       }
       localStorage.setItem("token", data.access_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // localStorage.setItem("user", JSON.stringify(data.user)); // Old line
+      if (data.user_id) {
+        localStorage.setItem("user_id", data.user_id);
+      } else {
+        // localStorage.removeItem("user"); // Not needed as we are not setting "user"
+        console.warn(
+          "User ID from API was undefined or invalid. 'user_id' not set in localStorage."
+        );
+      }
       localStorage.setItem("loginTime", Date.now().toString());
-      navigate("/");
+
+      // After successful login, check questionnaire status
+      // Use data directly from the API response for immediate checks
+      if (data.user_id) {
+        try {
+          const questionnaireRes = await fetch(
+            `${import.meta.env.VITE_API_URL}profile/questionnaire/${
+              data.user_id
+            }`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                // Authorization: `Bearer ${data.access_token}` // Add if endpoint is protected
+              },
+            }
+          );
+
+          if (questionnaireRes.ok) {
+            // Questionnaire data exists
+            navigate("/chat"); // Navigate to chat area
+          } else if (questionnaireRes.status === 404) {
+            // Questionnaire data does not exist
+            if (data.education_level) {
+              sessionStorage.setItem(
+                "education_level",
+                JSON.stringify({ education_level: data.education_level })
+              );
+              navigate("/profile/questionnaire");
+            } else {
+              navigate("/welcome");
+            }
+          } else {
+            // Handle other errors from questionnaire check
+            console.error(
+              "Error checking questionnaire status:",
+              await questionnaireRes.text()
+            );
+            // CORS or other network errors - fallback to welcome page
+            navigate("/welcome");
+          }
+        } catch (qError) {
+          console.error("Failed to fetch questionnaire status:", qError);
+          // Handle CORS errors or network issues
+          if (qError.message.includes("CORS") || qError.name === "TypeError") {
+            console.warn(
+              "CORS error detected. Redirecting to welcome page as fallback."
+            );
+            navigate("/welcome");
+          } else {
+            alert(
+              "An error occurred while checking your profile status. Proceeding to welcome page."
+            );
+            navigate("/welcome");
+          }
+        }
+      } else {
+        // Fallback if user_id is not available from API response
+        console.warn(
+          "User ID missing in API response. Navigating to default page, expecting ChatArea to redirect to login if needed."
+        );
+        navigate("/");
+      }
     } catch (error) {
       console.error("Login error:", error);
+      alert(error.message || "Login failed. Please try again.");
     }
   };
 

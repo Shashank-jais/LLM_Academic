@@ -1,4 +1,4 @@
-import { Route, BrowserRouter, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom"; // Added Navigate
 import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 import SignUp from "./components/SignUp";
@@ -9,35 +9,18 @@ import Result from "./components/Result";
 import Questionnaire from "./components/Questionnaire";
 // import ProfileFrontend from "./components/ProfileFrontend";
 import Profile from "./components/Profile";
-import { useEffect } from "react";
+// Removed useEffect for session check
 
 function App() {
-  const navigate = useNavigate();
-  const checkLocalStorageExpiry = () => {
-    const loginTime = localStorage.getItem("loginTime");
-    if (!loginTime) return;
-
-    const now = Date.now();
-    const expiryTime = 36 * 60 * 60 * 1000;
-
-    if (now - parseInt(loginTime, 10) > expiryTime) {
-      localStorage.clear();
-      console.log("Session expired. Logging out...");
-      navigate("/auth/login");
-    }
-  };
-  useEffect(() => {
-    checkLocalStorageExpiry();
-    const interval = setInterval(checkLocalStorageExpiry, 30 * 60 * 1000);
-    console.log("check");
-    return () => clearInterval(interval);
-  }, []);
+  // Removed useNavigate and checkLocalStorageExpiry logic from here
 
   return (
     <>
       <Routes>
+        <Route path="/" element={<Navigate replace to="/welcome" />} />{" "}
+        {/* Added redirect for root path */}
         <Route
-          path="/"
+          path="/chat" // Changed from "/" to "/chat"
           element={
             <div className="flex h-screen overflow-hidden">
               <Sidebar />

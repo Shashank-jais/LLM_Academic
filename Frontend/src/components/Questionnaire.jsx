@@ -9,17 +9,42 @@ import {
 const Questionnaire = () => {
   const [questions, setQuestions] = useState([]);
   const [formData, setFormData] = useState({});
+  const [educationLevel, setEducationLevel] = useState(null); // Added state for education level
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const education_level = JSON.parse(
-      sessionStorage.getItem("education_level")
-    );
+    const education_level_raw = sessionStorage.getItem("education_level");
+    let parsedEducationLevel = null;
+    if (
+      education_level_raw &&
+      education_level_raw !== "undefined" &&
+      education_level_raw !== ""
+    ) {
+      try {
+        parsedEducationLevel = JSON.parse(education_level_raw);
+      } catch (error) {
+        console.error(
+          "Failed to parse education_level from sessionStorage:",
+          error
+        );
+        // Optionally, handle this error, e.g., by navigating or showing a message
+      }
+    }
+    setEducationLevel(parsedEducationLevel); // Store the parsed object or null
+
     let selectedQuestions = [];
-    if (education_level.education_level === "9th or 10th") {
+    if (
+      parsedEducationLevel &&
+      parsedEducationLevel.education_level === "9th or 10th"
+    ) {
       selectedQuestions = tenth_grade_questions;
-    } else if (education_level.education_level === "11th or 12th") {
+    } else if (
+      parsedEducationLevel &&
+      parsedEducationLevel.education_level === "11th or 12th"
+    ) {
       selectedQuestions = senior_secondary_questions;
     } else {
+      // Default to graduate questions if education level is not specified or doesn't match
       selectedQuestions = graduate_questions;
     }
     setQuestions(selectedQuestions);
@@ -31,17 +56,20 @@ const Questionnaire = () => {
       });
       return { ...prev, ...initData };
     });
-  }, []);
+  }, []); // Empty dependency array is correct for one-time setup
 
   const [user_id, setUserId] = useState(null);
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.user_id);
+    const storedUserId = localStorage.getItem("user_id"); // Get user_id directly
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      // Handle case where user_id is not found in localStorage
+      console.error("User ID not found in localStorage.");
+      navigate("/auth/login");
     }
-  }, []);
+  }, [navigate]); // Added navigate to dependency array
 
   useEffect(() => {
     if (user_id) {
@@ -55,7 +83,7 @@ const Questionnaire = () => {
       [name]: value,
     }));
   };
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Removed from here
 
   return (
     <div className="min-h-screen w-full bg-white flex flex-col items-center py-10 px-4 sm:px-8 font-poppins">
@@ -87,31 +115,92 @@ const Questionnaire = () => {
 
             if (isFormComplete) {
               try {
-                const { user_id, ...answers } = formData;
+                const { user_id, ...answers } = formData; // Renamed from raw_responses to answers to match snippet
+
+                // Map frontend education levels to backend format
+                let backendEducationLevel = "graduate"; // default
+                if (educationLevel && educationLevel.education_level) {
+                  const level = educationLevel.education_level;
+                  if (level === "9th or 10th") {
+                    backendEducationLevel = "10th";
+                  } else if (level === "11th or 12th") {
+                    backendEducationLevel = "12th";
+                  } else {
+                    // Assuming 'graduate' or other values map to 'graduate'
+                    backendEducationLevel = "graduate";
+                  }
+                }
+
+                // Prepare questions_data for better LLM analysis
+                const questionsData = {};
+                questions.forEach((question, index) => {
+                  const questionId = question.name || `q${index + 1}`;
+                  questionsData[questionId] = {
+                    text: question.prompt,
+                    options: question.options
+                      ? question.options.reduce((opts, option, optIndex) => {
+                          opts[String.fromCharCode(97 + optIndex)] = option; // a, b, c, d...
+                          return opts;
+                        }, {})
+                      : {},
+                    category: question.name, // Assuming q.name can serve as category
+                  };
+                });
+
+                const payload = {
+                  user_id,
+                  education_level: backendEducationLevel, // String, not object
+                  raw_responses: answers,
+                  questions_data: questionsData,
+                };
+
+                console.log("Sending payload:", payload); // Debug log
 
                 const response = await fetch(
-                  "http://localhost:8000/profile/questionnaire",
+                  `${import.meta.env.VITE_API_URL}profile/questionnaire`,
                   {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                      user_id,
-                      answers,
-                    }),
+                    body: JSON.stringify(payload),
                   }
                 );
 
                 if (response.ok) {
-                  sessionStorage.clear();
-                  navigate(`/auth/login`);
+                  const result = await response.json();
+                  console.log("Success:", result);
+
+                  // Store the LLM profile for the Result component
+                  sessionStorage.setItem(
+                    "llm_profile",
+                    JSON.stringify(result.llm_profile)
+                  );
+                  sessionStorage.setItem("questionnaire_id", result.id);
+
+                  navigate(`/result`); // Navigate to results page
                 } else {
-                  alert("Something went wrong submitting your answers.");
+                  const errorData = await response.json().catch(() => ({}));
+                  console.error("Server error:", errorData);
+                  alert(
+                    "Something went wrong submitting your answers: " +
+                      (errorData.detail || "Unknown error")
+                  );
                 }
               } catch (error) {
                 console.error("Submission failed", error);
-                alert("An error occurred.");
+                if (
+                  error.message.includes("CORS") ||
+                  error.name === "TypeError"
+                ) {
+                  alert(
+                    "Network error: Please check your internet connection and try again. If the problem persists, contact support."
+                  );
+                } else {
+                  alert(
+                    "An error occurred during submission: " + error.message
+                  );
+                }
               }
             } else {
               alert("Please answer all questions before proceeding.");

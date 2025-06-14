@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-
   const DUMMY_API = {
     profile: "https://dummyjson.com/c/24af-a3a4-4809-9dcb", // get request dummy api
     academicProgress: "https://dummyjson.com/c/ded0-30c0-40ac-866c",
@@ -38,23 +36,12 @@ const Profile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const userId = localStorage.getItem("user_id"); // Check for user_id
+
+    if (!token || !userId) {
       navigate("/auth/login");
     }
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
   }, [navigate]);
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        <span className="ml-3 text-lg">Loading...</span>
-      </div>
-    );
-  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -333,7 +320,7 @@ const Profile = () => {
           </button>
 
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/chat")}
             className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-full transition-all duration-300"
             disabled={isEditing}
           >
